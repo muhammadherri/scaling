@@ -1,13 +1,13 @@
 <?php 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "timbangan";
-$conn = new mysqli($servername, $username, $password, $dbname);
+// $servername = "localhost";
+// $username = "root";
+// $password = "";
+// $dbname = "timbangan";
+// $conn = new mysqli($servername, $username, $password, $dbname);
 	// Check connection
-	if ($conn->connect_error) {
-	  die("Connection failed: " . $conn->connect_error);
-	}
+	// if ($conn->connect_error) {
+	//   die("Connection failed: " . $conn->connect_error);
+	// }
     $WEIGHT_DEDUCTOR = 80;
 
     function getPrintedRandomWeightNettoWithRatio($weightDifference, $benefitRatio=90) {
@@ -34,7 +34,8 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 		$waktu = date('H:i:s');
 		$tanggal =  date('Y-m-d'); // Tanggal: 20.01.07
 		$created_at = date('Y-m-d H:i:s');
-		
+		$norand = (rand(10,100));
+		$artrand = (rand(200,300));
 
         // echo "Real Weight <br> Bruto : $realWeightBruto <br> Tara : $realWeightTara <br> Netto : $realWeightNetto <br><br>";
 
@@ -63,18 +64,18 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
         // echo "<br> Value Won : ".($realWeightNetto - $printedWeightNetto)."<br>";
 
-		$sql = "INSERT INTO bm_scaling (supplier_name,no,nopol,truck,art,gross,tara,netto,created_at) 
-		VALUES('".$supplierName."','2','".$nopol."','2','2','".$printedWeightBruto."','".$printedWeightTara."','".$printedWeightNetto."','".$created_at."')";
-		if ($conn->query($sql) === TRUE) {
+		// $sql = "INSERT INTO bm_scaling (supplier_name,no,nopol,truck,art,gross,tara,netto,created_at) 
+		// VALUES('".$supplierName."','2','".$nopol."','2','2','".$printedWeightBruto."','".$printedWeightTara."','".$printedWeightNetto."','".$created_at."')";
+		// if ($conn->query($sql) === TRUE) {
 		
-		} else {
-		echo "Error: " . $sql . "<br>" . $conn->error;
-		} 
+		// } else {
+		// echo "Error: " . $sql . "<br>" . $conn->error;
+		// } 
 
-		$data = mysqli_query($conn,"select * from bm_scaling order by id desc limit 1");
-		while($d = mysqli_fetch_array($data)){
-			$id= $d['id'];
-		}
+		// $data = mysqli_query($conn,"select * from bm_scaling order by id desc limit 1");
+		// while($d = mysqli_fetch_array($data)){
+		// 	$id= $d['id'];
+		// }
     }
 ?>
 <html>
@@ -150,12 +151,13 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 					<div style='text-align:right'>No</div>
 				</td>
 				<td>:</td>
-				<td style='text-align:left; '>&nbsp; &nbsp; &nbsp; <?=$id?></td>
+				<td style='text-align:left; '>&nbsp; &nbsp; &nbsp;0<?= $norand ?></td>
+				<!-- <td style='text-align:left; '>&nbsp; &nbsp; &nbsp; <?=$id?></td> -->
 				<td style='width:10%'> </td>
 			</tr>
 			<tr>
 				<td>
-					<div style='text-align:right'>Date</div>
+					<div style='height:10px text-align:right; color:black'>Date</div>
 				</td>
 				<td>:</td>
 				<td style='text-align:left; '>&nbsp; <?= $tanggal ?></td>
@@ -163,7 +165,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 			</tr>
 			<tr>
 				<td>
-					<div style='text-align:right'>Time</div>
+					<div style='height:10px text-align:right; color:black'>Time</div>
 				</td>
 				<td>:</td>
 				<td style='text-align:left; '>&nbsp; <?= $waktu ?></td>
@@ -176,9 +178,9 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 				<td style='width:10%'> </td>
 			</tr>
 			<tr>
-				<td><div style='text-align:right; color:black'>Art.</div></td>
+				<td><div style='height:10px text-align:right; color:black'>Art.</div></td>
 				<td>:</td>
-				<td style='text-align:left;  color:black'>&nbsp; <?=$id?></td>
+				<td style='text-align:left;  color:black'>&nbsp; 0<?= $artrand ?></td>
 				<td style='width:10%'> </td>
 			</tr>
 			<tr>
@@ -200,9 +202,11 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 				<td style='width:10%'> </td>
 			</tr>
 		</table>
-		<table class="element" style='width:90%; font-size:5pt;' cellspacing='2'><tr></br><td align='center'>*** TERIMAKASIH ***</br></td></tr></table>
-		<button id="btnPrint" class="hidden-print">Print</button>
-        <script src="script.js"></script>
+		<!-- <table class="element" style='width:90%; font-size:5pt;' cellspacing='2'><tr></br><td align='center'>*** TERIMAKASIH ***</br></td></tr></table> -->
+		<br>
 	</center>
+	<button id="btnPrint" class="hidden-print">Print</button>
+	<script src="script.js"></script>
+
 </body>
 </html>
