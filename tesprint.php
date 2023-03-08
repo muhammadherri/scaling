@@ -71,7 +71,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 		}else{
 			$adj_net = $weightIn-$weightOut-100;
 		}
-		
+		$adj_net = ceil($adj_net/10)*10;
 		$adj_gross = $adj_net+$weightOut;
 		
 		$printedWeightBruto =$adj_gross;
@@ -89,25 +89,8 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 		$norand = str_pad(rand(10,100), 4, "0", STR_PAD_LEFT);
 		$artrand = str_pad(rand(200,300), 3, "0", STR_PAD_LEFT);
        
-        // if($realWeightNetto - $WEIGHT_DEDUCTOR > $travelPassWeight ) {
-            // $differenceWeight = $realWeightNetto - $travelPassWeight;
-
-            // $printedWeightNetto =  $travelPassWeight + getPrintedRandomWeightNettoWithRatio($differenceWeight);
-
-            // $printedWeightNetto = ceil($printedWeightNetto/10)*10;
-            
-            // $printedWeightTara = $realWeightTara; // Must always same with real weight
-
-            // $printedWeightBruto = $printedWeightNetto + $printedWeightTara;
-        // }
-        // else {
-            // $printedWeightNetto = $realWeightNetto - $WEIGHT_DEDUCTOR;
-            // $printedWeightTara = $realWeightTara;
-            // $printedWeightBruto = $printedWeightNetto + $printedWeightTara;
-        // }
-      
-		$sql = "INSERT INTO bm_scaling (supplier_name,nopol,adjustment,gross,tara,created_at,adj_netto,act_netto,surat_jalan,adj_gross) 
-		VALUES('".$supplierName."','".$nopol."','".$armada."','".$weightIn."','".$printedWeightTara."','".$created_at."','".$adj_net."','".$act_net."','".$travelPassWeight."','".$adj_gross."')";
+		$sql = "INSERT INTO bm_scaling (supplier_name,nopol,adjustment,gross,tara,created_at,surat_jalan,adj_netto,act_netto,adj_gross) 
+		VALUES('".$supplierName."','".$nopol."','".$armada."','".$realWeightBruto."','".$printedWeightTara."','".$created_at."','".$travelPassWeight."','".$adj_net."','".$act_net."','".$printedWeightBruto."')";
 		if ($conn->query($sql) === TRUE) {
 		
 		} else {
