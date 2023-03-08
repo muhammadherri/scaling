@@ -62,16 +62,12 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 		$pengurang = $armada-$hasilarmada;
 		
 		$act_net = $weightIn-$weightOut;
-		// $bm=$weightIn-$weightOut-$pengurang;
-		
-		// if ($travelPassWeight < $bm){
-			// $adj_net = $bm;
-		// }else{
-			// $adj_net = $weightIn-$weightOut-100;
-		// }
+		$bm=$weightIn-$weightOut-$pengurang;
 		
 		if($act_net <= 1000){
 			$adj_net = $act_net-($act_net*10/100);
+		}elseif($travelPassWeight < $bm){
+			$adj_net = $bm;
 		}else{
 			$adj_net = $weightIn-$weightOut-100;
 		}
@@ -80,7 +76,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 		
 		$printedWeightBruto =$adj_gross;
 		$printedWeightTara  = $weightOut;
-		$printedWeightNetto  = $act_net;
+		$printedWeightNetto  = $adj_net;
 		
         $realWeightBruto = $weightIn;
         $realWeightTara = $weightOut;
