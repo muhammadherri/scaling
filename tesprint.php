@@ -106,8 +106,8 @@ $conn = new mysqli($servername, $username, $password, $dbname);
             // $printedWeightBruto = $printedWeightNetto + $printedWeightTara;
         // }
       
-		$sql = "INSERT INTO bm_scaling (supplier_name,no,nopol,adjustment,art,gross,tara,netto,created_at,adj_netto,act_netto,surat_jalan,adj_gross) 
-		VALUES('".$supplierName."','','".$nopol."','".$armada."','','".$weightIn."','".$printedWeightTara."','".$printedWeightNetto."','".$created_at."','".$adj_net."','".$act_net."','".$travelPassWeight."','".$adj_gross."')";
+		$sql = "INSERT INTO bm_scaling (supplier_name,nopol,adjustment,gross,tara,created_at,adj_netto,act_netto,surat_jalan,adj_gross) 
+		VALUES('".$supplierName."','".$nopol."','".$armada."','".$weightIn."','".$printedWeightTara."','".$created_at."','".$adj_net."','".$act_net."','".$travelPassWeight."','".$adj_gross."')";
 		if ($conn->query($sql) === TRUE) {
 		
 		} else {
