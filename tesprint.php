@@ -72,7 +72,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 			$adj_net = $weightIn-$weightOut-100;
 		}
 		
-		$adj_gross = $act_net+$weightOut;
+		$adj_gross = $adj_net+$weightOut;
 		
 		$printedWeightBruto =$adj_gross;
 		$printedWeightTara  = $weightOut;
