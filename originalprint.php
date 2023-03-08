@@ -19,7 +19,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
         return $temp;
     }
 
-    if(isset($_POST["calculateButton"])){
+    if(isset($_POST["defaultbutton"])){
         $nopol = $_POST["nopol"];
 		$weightIn = $_POST["weightIn"];
         $weightOut = $_POST["weightOut"];
@@ -28,43 +28,18 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
         $realWeightBruto = $weightIn;
         $realWeightTara = $weightOut;
-        $realWeightNetto = $realWeightBruto - $realWeightTara;
+        $realWeightNetto = $travelPassWeight;
 		
-		
+		date_default_timezone_set("Asia/Bangkok");
+		$waktu = date('H.i.s');
+		$tanggal =  date('Y-m-d'); // Tanggal: 20.01.07
+		$created_at = date('Y-m-d H:i:s');
+		$norand = str_pad(rand(10,100), 4, "0", STR_PAD_LEFT);
+		$artrand = str_pad(rand(200,300), 3, "0", STR_PAD_LEFT);
+
         // echo "Real Weight <br> Bruto : $realWeightBruto <br> Tara : $realWeightTara <br> Netto : $realWeightNetto <br><br>";
 
-        if($realWeightNetto - $WEIGHT_DEDUCTOR > $travelPassWeight ) {
-            $differenceWeight = $realWeightNetto - $travelPassWeight;
-
-            $printedWeightNetto =  $travelPassWeight + getPrintedRandomWeightNettoWithRatio($differenceWeight);
-
-            $printedWeightNetto = ceil($printedWeightNetto/10)*10;
-            
-            $printedWeightTara = $realWeightTara; // Must always same with real weight
-
-            $printedWeightBruto = $printedWeightNetto + $printedWeightTara;
-        }
-        else {
-            $printedWeightNetto = $realWeightNetto - $WEIGHT_DEDUCTOR;
-            $printedWeightTara = $realWeightTara;
-            $printedWeightBruto = $printedWeightNetto + $printedWeightTara;
-        }
-		date_default_timezone_set("Asia/Bangkok");
-
-		// $no = "  No:";	
-		// echo "COBA : ".$no;
-		$no =str_pad("No:",5 ," ", STR_PAD_LEFT);
-		$norand = $no.str_pad(str_pad(rand(10,100),4,"0", STR_PAD_LEFT) , 7, " ", STR_PAD_LEFT)."\n";
-		$date = "Date:".str_pad(date('Y-m-d'), 11, " ", STR_PAD_LEFT)."\n";
-		$time = "Time:".str_pad(str_pad(date('H.i.s'),9," ", STR_PAD_LEFT),2," ",STR_PAD_RIGHT)."\n";
-		$truck = "Truk:".str_pad(str_pad($nopol, 5, "0", STR_PAD_RIGHT), 6, " ", STR_PAD_LEFT)."\n";
-		$art = "Art.:".str_pad(str_pad(str_pad(rand(0,300),4," ",STR_PAD_RIGHT), 5, " ", STR_PAD_LEFT), 5, " ", STR_PAD_LEFT)."\n";
-		$g = "G:".str_pad($printedWeightBruto, 9, " ", STR_PAD_LEFT)."(Kg)"."\n";
-		$t = "T:".str_pad($printedWeightTara, 9, " ", STR_PAD_LEFT)."(Kg)"."\n";
-		$n = "N:".str_pad($printedWeightNetto, 9, " ", STR_PAD_LEFT)."(Kg)"."\n";
-
-		$printed = $norand.$date.$time.$truck.$art.$g.$t.$n;
-
+       
         // echo "Printed Weight <br>";
         // echo "Bruto : ".$printedWeightBruto."<br>";
         // echo "Tara : ".$printedWeightTara."<br>";
@@ -73,8 +48,8 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
         // echo "<br> Value Won : ".($realWeightNetto - $printedWeightNetto)."<br>";
 
-		$sql = "INSERT INTO bm_scaling (supplier_name,no,nopol,truck,art,gross,tara,netto) 
-		VALUES('".$supplierName."','2','".$nopol."','2','2','".$printedWeightBruto."','".$printedWeightTara."','".$printedWeightNetto."')";
+		$sql = "INSERT INTO bm_scaling (supplier_name,no,nopol,truck,art,gross,tara,netto,created_at) 
+		VALUES('".$supplierName."','2','".$nopol."','2','2','".$printedWeightBruto."','".$printedWeightTara."','".$printedWeightNetto."','".$created_at."')";
 		if ($conn->query($sql) === TRUE) {
 		
 		} else {
@@ -87,13 +62,8 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 		}
     }
 ?>
-
-<!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge, chrome=1">
 	<title>Buana Megah</title>
 	<link href="https://fonts.cdnfonts.com/css/dot-matrix" rel="stylesheet">
 	<style>
@@ -103,13 +73,8 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 	.hidden-print * {
 		display: none !important;
 	}
-	pre{
-		font-family: 'Dot Matrix', sans-serif;
-		width : 60em;
-		word-wrap: break-word;
-		white-space: pre-wrap;
 	}
-	#body{
+	 #body{
 		 width: 200px;margin: auto;
 		 font-family: 'Dot Matrix', sans-serif;
 	 }
@@ -133,7 +98,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 	}
 	</style>
 </head>
-<body style='width: 150px;margin-left: auto; margin-right:auto'>
+<body style=' font-size:5pt; width: 150px;margin-left: auto; margin-right:auto'>
 	<center>
 		<!-- <table style='width:90%; font-size:10pt; border-collapse: collapse;' border = '0'>
 			<tr height='100%'>
@@ -158,7 +123,61 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 				border-width: 1px;
 			} 
 		</style>
-		<pre><?= $printed ?></pre> 	
+		<table class="element" cellspacing='0' cellpadding='0' style='width:100%; font-size:10pt;  border-collapse: collapse;' border='0'>
+			<!-- <tr>
+				<td colspan='5'><hr></td>
+			</tr> -->
+			<tr>
+				<td>
+					<div style=' text-align:right'>No</div>
+				</td>
+				<td>:&nbsp; &nbsp;<?= $norand ?></td>
+				<td style='width:10%'> </td>
+			</tr>
+			<tr>
+				<td>
+					<div style='text-align:right; color:black'>Date</div>
+				</td>
+				<td style='text-align:left;'>:&nbsp;<?= $tanggal ?></td>
+				<td style='width:50%'> </td>
+			</tr>
+			<tr>
+				<td>
+					<div style='text-align:right; color:black'>Time</div>
+				</td>
+				<td>: <?= $waktu ?></td>
+				<td style='width:10%'> </td>
+			</tr>
+			<tr>
+				<td><div style='text-align:right; color:black'>Truk</div></td>
+				<td>: <?= $nopol ?></td>
+				<td style='width:10%'> </td>
+			</tr>
+			<tr>
+				<td><div style='text-align:right; color:black'>Art.</div></td>
+				<td>: <?= $artrand ?></td>
+				<td style='width:10%'> </td>
+			</tr>
+			<tr>
+				<td><div style='text-align:left; color:black'>G:</div></td>
+				<td style='text-align:right;'><?= $realWeightBruto ?>(Kg)</td>
+				<td style='width:26%'> </td>
+			</tr>
+			<tr>
+				<td><div style='text-align:left; color:black'>T:</div></td>
+				<td style='text-align:right;'><?= $realWeightTara ?>(Kg)</td>
+				<td style='width:26%'> </td>
+			</tr>
+			<tr>
+				<td><div style='text-align:left; color:black'>N:</div></td>
+				<td style='text-align:right;'><?= $realWeightNetto ?>(Kg)</td>
+				<td style='width:26%'> </td>
+			</tr>
+		</table>
+		<br>
+		<br>
+		<!-- <table class="element" style='width:90%; font-size:8pt;' cellspacing='2'><tr></br><td align='center'>*** TERIMAKASIH ***</br></td></tr></table> -->
+		<br>
 	</center>
 	<button id="btnPrint" class="hidden-print">Print</button>
 	<script src="script.js"></script>
