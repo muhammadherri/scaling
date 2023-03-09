@@ -37,8 +37,8 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 		$norand = str_pad(rand(10,100), 4, "0", STR_PAD_LEFT);
 		$artrand = str_pad(rand(200,300), 3, "0", STR_PAD_LEFT);
 
-		$sql = "INSERT INTO bm_scaling (supplier_name,no,nopol,adjustment,art,gross,tara,netto,created_at,surat_jalan) 
-		VALUES('".$supplierName."','','".$nopol."','".$armada."','','".$printedWeightBruto."','".$printedWeightTara."','".$printedWeightNetto."','".$created_at."','".$travelPassWeight."')";
+		$sql = "INSERT INTO bm_scaling (supplier_name,no,nopol,adjustment,art,gross,tara,act_netto,created_at,date,surat_jalan) 
+		VALUES('".$supplierName."','','".$nopol."','".$armada."','','".$printedWeightBruto."','".$printedWeightTara."','".$printedWeightNetto."','".$created_at."','".$tanggal."','".$travelPassWeight."')";
 		if ($conn->query($sql) === TRUE) {
 		
 		} else {
@@ -59,17 +59,29 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 		
 		$armada = $_POST["armada"];
 		$hasilarmada =$armada*20/100;
-		$pengurang = $armada-$hasilarmada;
-		
+		$pengurangoriginal = $armada-$hasilarmada;
+		// echo $armada;
+		// echo $pengurang;
+		if($armada<=100){
+			// echo 'seratus';
+			$pengurangscnd=rand($pengurangoriginal,100);
+			$pengurang=ceil($pengurangscnd/10)*10;
+		}else{
+			// echo 'duaseratus';
+			$pengurangscnd=rand($pengurangoriginal,200);
+			$pengurang=ceil($pengurangscnd/10)*10;
+			// echo $pengurang;
+		}
 		$act_net = $weightIn-$weightOut;
 		$bm=$weightIn-$weightOut-$pengurang;
+		
 		
 		if($act_net <= 1000){
 			$adj_net = $act_net-($act_net*10/100);
 		}elseif($travelPassWeight < $bm){
 			$adj_net = $bm;
 		}else{
-			$adj_net = $weightIn-$weightOut-100;
+			$adj_net = $weightIn-$weightOut-$pengurang;
 		}
 		$adj_net = ceil($adj_net/10)*10;
 		$adj_gross = $adj_net+$weightOut;
@@ -89,8 +101,8 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 		$norand = str_pad(rand(10,100), 4, "0", STR_PAD_LEFT);
 		$artrand = str_pad(rand(200,300), 3, "0", STR_PAD_LEFT);
        
-		$sql = "INSERT INTO bm_scaling (supplier_name,nopol,adjustment,gross,tara,created_at,surat_jalan,adj_netto,act_netto,adj_gross) 
-		VALUES('".$supplierName."','".$nopol."','".$armada."','".$realWeightBruto."','".$printedWeightTara."','".$created_at."','".$travelPassWeight."','".$adj_net."','".$act_net."','".$printedWeightBruto."')";
+		$sql = "INSERT INTO bm_scaling (supplier_name,nopol,adjustment,gross,tara,created_at,surat_jalan,date,adj_netto,act_netto,adj_gross) 
+		VALUES('".$supplierName."','".$nopol."','".$pengurang."','".$realWeightBruto."','".$printedWeightTara."','".$created_at."','".$travelPassWeight."','".$tanggal."','".$adj_net."','".$act_net."','".$printedWeightBruto."')";
 		if ($conn->query($sql) === TRUE) {
 		
 		} else {
